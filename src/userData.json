@@ -1,0 +1,69 @@
+{
+  "data": [
+    {
+      "sno": 1,
+      "id": "ALI100",
+      "pkg": "11 MB",
+      "name": "WAHAB",
+      "address": "101/2 1ST FLOOR",
+      "mobile": 3333333,
+      "nic": 323413132,
+      "amount ": 1300,
+      "REM amount": 200,
+      "PAID amount ": 1500,
+      "BAL amount": 0
+    },
+    {
+      "sno": 2,
+      "id": "ALI101",
+      "pkg": "11 MB",
+      "name": "SHAKEEL",
+      "address": "233/2 3RD FLOOR",
+      "mobile": 33333,
+      "nic": 3132132132,
+      "amount ": 1200,
+      "REM amount": 0,
+      "PAID amount ": 1200,
+      "BAL amount": 0
+    },
+    {
+      "sno": 3,
+      "id": "ALI102",
+      "pkg": "35 MB",
+      "name": "STTAR",
+      "address": "50/2 GROUND FLOOR",
+      "mobile": 3333333,
+      "nic": 31321321,
+      "amount ": 1500,
+      "REM amount": 500,
+      "PAID amount ": 1500,
+      "BAL amount": 500
+    },
+    {
+      "sno": 4,
+      "id": "ALI103",
+      "pkg": "50 MB",
+      "name": "GAFFAR",
+      "address": "104/2 3RD FLOOR",
+      "mobile": 333333,
+      "nic": 3132132131,
+      "amount ": 2000,
+      "REM amount": 2000,
+      "PAID amount ": 3000,
+      "BAL amount": 1000
+    },
+    {
+      "sno": 5,
+      "id": "ALI104",
+      "pkg": "100 MB",
+      "name": "MUNEEB",
+      "address": "165/2 4RTH FLOOR",
+      "mobile": 333333,
+      "nic": 132132121,
+      "amount ": 2500,
+      "REM amount": 0,
+      "PAID amount ": 0,
+      "BAL amount": 2500
+    }
+  ]
+}

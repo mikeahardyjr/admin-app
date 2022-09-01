@@ -1,0 +1,12 @@
+/* @import "antd/dist/antd.css"; */
+@import url("https://fonts.googleapis.com/css2?family=Nunito&display=swap");
+@import "./antd.css";
+@import "./general.css";
+@import "./layout.css";
+
+/* pages css */
+@import "./pages/login.css";
+@import "./pages/createInvoice.css";
+
+/* component css */
+/* @import "./components/MainTable.css"; */
