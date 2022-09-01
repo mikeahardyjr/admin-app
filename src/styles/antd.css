@@ -56,3 +56,6 @@
 .ant-menu-item-icon {
   font-size: 25px !important;
 }
+h1.ant-typography, .ant-typography h1{
+  margin-bottom: 0 !important;
+}

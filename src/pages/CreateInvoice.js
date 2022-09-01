@@ -15,7 +15,11 @@ import {
   Modal,
 } from "antd";
 import { useEffect, useState } from "react";
-import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
+import {
+  AiOutlineArrowLeft,
+  AiOutlineMinus,
+  AiOutlinePlus,
+} from "react-icons/ai";
 import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 import {
   addDoc,
@@ -29,7 +33,7 @@ import {
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 
 import { db, storage } from "../firebase";
-import { useLocation } from "react-router";
+import { useHistory, useLocation } from "react-router";
 import { uid } from "uid";
 import Swal from "sweetalert2";
 
@@ -56,6 +60,7 @@ const CreateInvoice = () => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [existing, setExisting] = useState("");
   const location = useLocation();
+  const history = useHistory()
   const onBillChange = (e) => {
     setBill(e.target.value);
   };
@@ -156,13 +161,13 @@ const CreateInvoice = () => {
   };
   const handleCancel = () => setPreviewVisible(false);
 
-  const clearFields = () =>{
-    setTitle('')
-    setTags([])
-    setBill(false)
-    setDescription('')
-    setFileList([])
-  }
+  const clearFields = () => {
+    setTitle("");
+    setTags([]);
+    setBill(false);
+    setDescription("");
+    setFileList([]);
+  };
   const onSubmit = async () => {
     console.log(tags, description, title, bill, fileList);
     // Add a new document in collection
@@ -188,12 +193,12 @@ const CreateInvoice = () => {
           images,
           timeStamp: serverTimestamp(),
         });
-        clearFields()
+        clearFields();
       }
       Swal.fire({
         title: "Success",
-        text: `Job ${existing ? 'Updated' : 'Added'} Successfully`,
-        icon:'success'
+        text: `Job ${existing ? "Updated" : "Added"} Successfully`,
+        icon: "success",
       });
       setLoading(false);
       console.log(response);
@@ -247,10 +252,18 @@ const CreateInvoice = () => {
   return (
     <Layout active="create-invoice">
       <div className="general-margin-padding form-container">
-        <Title style={{ textAlign: "center" }}>
-          <FaFileInvoice style={{ marginRight: "10px" }} />
-          Add Job
-        </Title>
+        <div style={{
+          display:'flex',
+          alignItems:'center',
+          flexWrap:'wrap'
+          // justifyContent:'center'
+        }}>
+          <Button style={{ marginRight:'20px'}} shape="circle" icon={<AiOutlineArrowLeft />} size="large" onClick={()=>history.push('/')}/>
+          <Title style={{ textAlign: "center" ,marginLeft:'20px'}}>
+            <FaFileInvoice style={{ marginRight: "10px" }} />
+            Add Job
+          </Title>
+        </div>
         <div className="margin-vertical">
           <Title level={3}>Title</Title>
           <Input value={title} onChange={(e) => setTitle(e.target.value)} />
