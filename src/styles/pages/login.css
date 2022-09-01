@@ -18,3 +18,12 @@
   height: 40px;
   border-radius: 5px;
 }
+@media (max-width: 420px) {
+  .login {
+   padding: 10px;
+  }
+  .login .login-container h1 {
+    margin-bottom: 0;
+    font-size: 2rem;
+  }
+}

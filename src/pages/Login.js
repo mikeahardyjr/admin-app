@@ -45,7 +45,7 @@ const Login = () => {
         onKeyDown={(e) => e.key === "Enter" && onSubmit()}
       >
         <Title level={1}>ADMIN DASHBOARD</Title>
-        <p>Sign in to your account and enjoy unlimited perks.</p>
+        <p>Sign in to See Job listing.</p>
         {/* <form onSubmit={onSubmit}> */}
         <Input
           placeholder="User Name"
@@ -55,6 +55,7 @@ const Login = () => {
         <Input
           placeholder="Password"
           value={password}
+          type={'password'}
           onChange={(e) => setPassword(e.target.value)}
         />
         <Button type="primary" block onClick={onSubmit}>

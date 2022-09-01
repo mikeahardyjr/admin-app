@@ -31,6 +31,7 @@ import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import { db, storage } from "../firebase";
 import { useLocation } from "react-router";
 import { uid } from "uid";
+import Swal from "sweetalert2";
 
 const { Title } = Typography;
 const { Option } = Select;
@@ -155,6 +156,13 @@ const CreateInvoice = () => {
   };
   const handleCancel = () => setPreviewVisible(false);
 
+  const clearFields = () =>{
+    setTitle('')
+    setTags([])
+    setBill(false)
+    setDescription('')
+    setFileList([])
+  }
   const onSubmit = async () => {
     console.log(tags, description, title, bill, fileList);
     // Add a new document in collection
@@ -180,7 +188,13 @@ const CreateInvoice = () => {
           images,
           timeStamp: serverTimestamp(),
         });
+        clearFields()
       }
+      Swal.fire({
+        title: "Success",
+        text: `Job ${existing ? 'Updated' : 'Added'} Successfully`,
+        icon:'success'
+      });
       setLoading(false);
       console.log(response);
     } catch (error) {

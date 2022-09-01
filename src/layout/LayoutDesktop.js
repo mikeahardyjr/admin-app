@@ -10,11 +10,13 @@ import { GoPrimitiveDot } from "react-icons/go";
 
 import LayoutMenu from "./LayoutMenu.js";
 import React, { useState } from "react";
+import { useHistory } from "react-router";
 
 const { Header, Content, Sider } = Layout;
 
 const LayoutDesktop = ({ children, active }) => {
   const [collapsed, setCollapsed] = useState(false);
+  const history = useHistory()
   const toggle = () => {
     setCollapsed(!collapsed);
   };
@@ -29,6 +31,10 @@ const LayoutDesktop = ({ children, active }) => {
                 className="header-right header-logout-btn"
                 type="primary"
                 style={{ margin: "auto 0" }}
+                onClick={()=>{
+                  history.push('/login')
+                  localStorage.removeItem("accessToken");
+                }}
                 // block
               >
                 Logout
