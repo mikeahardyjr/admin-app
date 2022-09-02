@@ -1,5 +1,4 @@
 import DashboardLayoutDesktop from "./LayoutDesktop.js";
-import DashboardLayoutMobile from "./DashboardLayoutMobile";
 
 const DashboardLayout = ({ active, children }) => {
   return (

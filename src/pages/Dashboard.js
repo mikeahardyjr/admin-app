@@ -1,6 +1,6 @@
 import Layout from "../layout/DashboarLayout";
 import { Typography, Button, Image, Tag, Menu, Dropdown } from "antd";
-import { FaEllipsisV, FaList, FaPlus, FaTrash, FaUsers } from "react-icons/fa";
+import { FaEllipsisV, FaList, FaPlus } from "react-icons/fa";
 import TableComponent from "../components/TableComponent";
 import { useEffect } from "react";
 import { useState } from "react";
@@ -8,13 +8,7 @@ import { useHistory } from "react-router";
 import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
 import { db } from "../firebase";
 import moment from "moment";
-import {
-  AiFillDelete,
-  AiFillEdit,
-  AiFillEye,
-  AiOutlineEllipsis,
-  AiOutlineUser,
-} from "react-icons/ai";
+import { AiFillDelete, AiFillEdit, AiFillEye } from "react-icons/ai";
 import Swal from "sweetalert2";
 import ViewJobModal from "../components/ViewJobModal";
 
@@ -71,7 +65,7 @@ const Dashboard = () => {
   }, []);
   const menu = (doc) => (
     <Menu>
-      <Menu.Item key="1" className='icon-btn' icon={<AiFillEye />}>
+      <Menu.Item key="1" className="icon-btn" icon={<AiFillEye />}>
         <ViewJobModal job={doc} />
       </Menu.Item>
       <Menu.Item

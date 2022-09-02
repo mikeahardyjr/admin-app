@@ -1,7 +1,6 @@
-import { Button, Image, Modal, Tag, Typography } from "antd";
+import {  Image, Modal, Tag, Typography } from "antd";
 import moment from "moment/moment";
 import React, { useState } from "react";
-import { AiFillEye } from "react-icons/ai";
 
 const ViewJobModal = ({ job }) => {
   const { Title } = Typography;
