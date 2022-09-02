@@ -1,6 +1,6 @@
 import Layout from "../layout/DashboarLayout";
-import { Typography, Button, Image, Tag } from "antd";
-import { FaList, FaPlus, FaTrash, FaUsers } from "react-icons/fa";
+import { Typography, Button, Image, Tag, Menu, Dropdown } from "antd";
+import { FaEllipsisV, FaList, FaPlus, FaTrash, FaUsers } from "react-icons/fa";
 import TableComponent from "../components/TableComponent";
 import { useEffect } from "react";
 import { useState } from "react";
@@ -8,8 +8,15 @@ import { useHistory } from "react-router";
 import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
 import { db } from "../firebase";
 import moment from "moment";
-import { AiFillDelete, AiFillEdit } from "react-icons/ai";
+import {
+  AiFillDelete,
+  AiFillEdit,
+  AiFillEye,
+  AiOutlineEllipsis,
+  AiOutlineUser,
+} from "react-icons/ai";
 import Swal from "sweetalert2";
+import ViewJobModal from "../components/ViewJobModal";
 
 const Dashboard = () => {
   const { Title } = Typography;
@@ -28,29 +35,29 @@ const Dashboard = () => {
   console.log(data);
   const handleDeleteDoc = async (id) => {
     try {
-      console.log(id)
-     
+      console.log(id);
+
       Swal.fire({
         title: "Are you sure you want to delete this job?",
         inputAttributes: {
-          autocapitalize: 'off'
+          autocapitalize: "off",
         },
         showCancelButton: true,
-        confirmButtonText: 'Yes',
-        cancelButtonText:'No',
+        confirmButtonText: "Yes",
+        cancelButtonText: "No",
         showLoaderOnConfirm: true,
-        allowOutsideClick: () => !Swal.isLoading()
-      }).then(async(result) => {
+        allowOutsideClick: () => !Swal.isLoading(),
+      }).then(async (result) => {
         if (result.isConfirmed) {
           await deleteDoc(doc(db, "jobs", id));
-          setData(data?.filter((item)=>item?.id !== id))
+          setData(data?.filter((item) => item?.id !== id));
           Swal.fire({
             title: `Job Deleted Successfully`,
             imageUrl: result.value.avatar_url,
-            icon:'success'
-          })
+            icon: "success",
+          });
         }
-      })
+      });
     } catch (error) {
       console.log(error);
     }
@@ -62,6 +69,35 @@ const Dashboard = () => {
       console.log(error);
     }
   }, []);
+  const menu = (doc) => (
+    <Menu>
+      <Menu.Item key="1" className='icon-btn' icon={<AiFillEye />}>
+        <ViewJobModal job={doc} />
+      </Menu.Item>
+      <Menu.Item
+        key="2"
+        className="icon-btn"
+        icon={<AiFillEdit />}
+        onClick={() =>
+          history.push({
+            pathname: "/create",
+            state: doc?.id,
+          })
+        }
+      >
+        Edit
+      </Menu.Item>
+      <Menu.Item
+        key="3"
+        icon={<AiFillDelete />}
+        onClick={() => handleDeleteDoc(doc?.id)}
+        className="icon-btn"
+      >
+        Delete
+      </Menu.Item>
+    </Menu>
+  );
+
   let tableData = {
     columns: [
       {
@@ -110,24 +146,29 @@ const Dashboard = () => {
       return {
         image: <Image width="80px" src={doc?.images[0]} />,
         title: doc?.title,
-        bill: <Tag color={doc?.bill ? '#87d068' : '#f50'} >{doc?.bill ? 'true' : 'false'}</Tag>,
+        bill: (
+          <Tag color={doc?.bill ? "#87d068" : "#f50"}>
+            {doc?.bill ? "true" : "false"}
+          </Tag>
+        ),
         tags: doc?.tags?.join(", "),
         description: doc?.description,
         date: moment(doc?.timeStamp?.seconds * 1000).format("MMM Do YYYY"),
         action: (
           <>
-            {/* <Button>View</Button n> */}
-            <Button shape="circle" style={{marginRight:'5px',background:'##f50'}}  icon={<AiFillEdit />} onClick={()=>history.push({
-              pathname:'/create',
-              state:doc?.id
-              
-            })}/>
-            <Button shape="circle"  icon={<AiFillDelete />} onClick={()=>handleDeleteDoc(doc?.id)} />
+            <Dropdown
+              overlay={menu(doc)}
+              placement="bottomLeft"
+              trigger={["click"]}
+            >
+              <Button shape="circle" icon={<FaEllipsisV />} />
+            </Dropdown>
           </>
         ),
       };
     }),
   };
+
   useEffect(() => {
     let tempArr = [];
     let token = localStorage.getItem("accessToken");

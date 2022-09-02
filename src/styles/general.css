@@ -12,13 +12,13 @@ body {
   margin-top: 40px;
   margin-left: 20px;
 }
-.flex-between{
+.flex-between {
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
 }
-.flex-between button{
+.flex-between button {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -26,4 +26,26 @@ body {
 .general-title-h1 {
   display: flex;
   align-items: center;
+}
+.view-job-modal-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+.view-job-modal-row div{
+  display: flex;
+  align-items: center;
+}
+.tags-modal{
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+.icon-btn{
+  display: flex !important;
+  align-items: center;
+}
+.icon-btn svg{
+  margin-right: 5px;
 }

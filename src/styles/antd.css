@@ -59,3 +59,6 @@
 h1.ant-typography, .ant-typography h1{
   margin-bottom: 0 !important;
 }
+ .ant-typography + h5.ant-typography { 
+margin-top: 0 !important;
+}

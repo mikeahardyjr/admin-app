@@ -183,6 +183,7 @@ const CreateInvoice = () => {
           tags: tags,
           description: description,
           images: images,
+          timeStamp:serverTimestamp()
         });
       } else {
         response = await addDoc(collection(db, "jobs"), {
