@@ -10,10 +10,16 @@ import { useMemo, useState, useRef } from "react";
 import { Button } from "antd";
 
 import { useEffect } from "react";
+import { useResizeDetector } from 'react-resize-detector';
+
 
 const Map = (props) => {
   const [position, setPosition] = useState([0, 0]);
   const refmarker = useRef(null);
+
+  // detect change every time modal opens
+  const { width, height, ref } = useResizeDetector();
+
 
   const [showMyLocation, setShowMyLocation] = useState(false);
   const [liveLocation, setLiveLocation] = useState([]);
@@ -49,7 +55,7 @@ const Map = (props) => {
         props?.setCenter(props.location);
       }
     }
-  }, []);
+  }, [ref]);
 
   const getLiveLocation = () => {
     if (!showMyLocation) {
@@ -93,7 +99,7 @@ const Map = (props) => {
   );
 
   return (
-    <div style={{ height: "100%", width: "100%" }}>
+    <div style={{ height: "100%", width: "100%" }} ref={ref}>
       <div style={{ height: "70%", width: "100%" }}>
         <link
           rel="stylesheet"
