@@ -36,6 +36,7 @@ import { db, storage } from "../firebase";
 import { useHistory, useLocation } from "react-router";
 import { uid } from "uid";
 import Swal from "sweetalert2";
+import Map from "../components/Map";
 
 const { Title } = Typography;
 const { Option } = Select;
@@ -59,8 +60,9 @@ const CreateInvoice = () => {
   ]);
   const [isEditMode, setIsEditMode] = useState(false);
   const [existing, setExisting] = useState("");
+  const [position,setPosition] = useState([45.24652,69.23937])
   const location = useLocation();
-  const history = useHistory()
+  const history = useHistory();
   const onBillChange = (e) => {
     setBill(e.target.value);
   };
@@ -183,7 +185,7 @@ const CreateInvoice = () => {
           tags: tags,
           description: description,
           images: images,
-          timeStamp:serverTimestamp()
+          timeStamp: serverTimestamp(),
         });
       } else {
         response = await addDoc(collection(db, "jobs"), {
@@ -249,18 +251,26 @@ const CreateInvoice = () => {
       console.log(error);
     }
   }, []);
-
+{console.log(position)}
   return (
     <Layout active="create-invoice">
       <div className="general-margin-padding form-container">
-        <div style={{
-          display:'flex',
-          alignItems:'center',
-          flexWrap:'wrap'
-          // justifyContent:'center'
-        }}>
-          <Button style={{ marginRight:'20px'}} shape="circle" icon={<AiOutlineArrowLeft />} size="large" onClick={()=>history.push('/')}/>
-          <Title style={{ textAlign: "center" ,marginLeft:'20px'}}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            flexWrap: "wrap",
+            // justifyContent:'center'
+          }}
+        >
+          <Button
+            style={{ marginRight: "20px" }}
+            shape="circle"
+            icon={<AiOutlineArrowLeft />}
+            size="large"
+            onClick={() => history.push("/")}
+          />
+          <Title style={{ textAlign: "center", marginLeft: "20px" }}>
             <FaFileInvoice style={{ marginRight: "10px" }} />
             Add Job
           </Title>
@@ -296,6 +306,10 @@ const CreateInvoice = () => {
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           />
+        </div>
+        <div className="margin-vertical">
+         <Map location={position} setCenter={setPosition}/>
+          
         </div>
         <div className="margin-vertical">
           <Title level={3}>Images</Title>

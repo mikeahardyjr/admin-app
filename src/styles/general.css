@@ -49,3 +49,6 @@ body {
 .icon-btn svg{
   margin-right: 5px;
 }
+.leaflet-touch .leaflet-control-attribution{
+  display: none;
+}
