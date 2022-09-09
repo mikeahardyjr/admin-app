@@ -1,6 +1,7 @@
 import {  Image, Modal, Tag, Typography } from "antd";
 import moment from "moment/moment";
 import React, { useState } from "react";
+import Map from "./Map";
 
 const ViewJobModal = ({ job }) => {
   const { Title } = Typography;
@@ -52,6 +53,9 @@ const ViewJobModal = ({ job }) => {
                 {tag}
               </Tag>
             ))}
+          </Title>
+          <Title level={5}>
+              <Map location={job?.location} readOnly={true}/>
           </Title>
           <Title level={5}>Images : </Title>
           {job?.images?.map((image)=>(

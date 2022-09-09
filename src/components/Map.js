@@ -11,11 +11,9 @@ import { Button } from "antd";
 
 import { useEffect } from "react";
 
-
 const Map = (props) => {
   const [position, setPosition] = useState([0, 0]);
   const refmarker = useRef(null);
-
 
   const [showMyLocation, setShowMyLocation] = useState(false);
   const [liveLocation, setLiveLocation] = useState([]);
@@ -28,10 +26,12 @@ const Map = (props) => {
           // setAcc(position.coords.accuracy);
 
           setPosition([position.coords.latitude, position.coords.longitude]);
-          props.setCenter([
-            position.coords.latitude,
-            position.coords.longitude,
-          ]);
+          if (!props.readOnly) {
+            props?.setCenter([
+              position.coords.latitude,
+              position.coords.longitude,
+            ]);
+          }
         },
         (e) => {
           console.log(e);
@@ -45,6 +45,9 @@ const Map = (props) => {
     } else {
       console.log(props.location);
       setPosition(props.location);
+      if (!props.readOnly) {
+        props?.setCenter(props.location);
+      }
     }
   }, []);
 
@@ -79,8 +82,10 @@ const Map = (props) => {
         if (marker != null) {
           let lat = marker.getLatLng().lat;
           let lng = marker.getLatLng().lng;
-          props.setCenter([lat, lng]);
           setPosition([lat, lng]);
+          if (!props.readOnly) {
+            props.setCenter([lat, lng]);
+          }
         }
       },
     }),
@@ -97,7 +102,7 @@ const Map = (props) => {
         <MapContainer
           dragging={true}
           key={Math.random() * 100 + "as9di214b"}
-          center={position}
+          center={props.location}
           zoom={5}
           scrollWheelZoom={true}
           style={{ height: "400px" }}
@@ -111,7 +116,7 @@ const Map = (props) => {
             ref={refmarker}
             riseOnHover={true}
             eventHandlers={eventHandlers}
-            position={position}
+            position={props.location}
             // icon={greenIcon}
           >
             <Popup>Drag Onto your Location</Popup>

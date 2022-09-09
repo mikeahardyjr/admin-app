@@ -60,7 +60,8 @@ const CreateInvoice = () => {
   ]);
   const [isEditMode, setIsEditMode] = useState(false);
   const [existing, setExisting] = useState("");
-  const [position,setPosition] = useState([45.24652,69.23937])
+  // const [position,setPosition] = useState([45.24652,69.23937])
+  const [position,setPosition] = useState([0,0])
   const location = useLocation();
   const history = useHistory();
   const onBillChange = (e) => {
@@ -185,6 +186,7 @@ const CreateInvoice = () => {
           tags: tags,
           description: description,
           images: images,
+          location:position,
           timeStamp: serverTimestamp(),
         });
       } else {
@@ -194,6 +196,7 @@ const CreateInvoice = () => {
           title,
           bill,
           images,
+          location:position,
           timeStamp: serverTimestamp(),
         });
         clearFields();
@@ -227,12 +230,13 @@ const CreateInvoice = () => {
       console.log(id);
       let response = await getDoc(doc(db, "jobs", id));
       const data = response?.data();
-
+      console.log(data)
       setExisting(id);
       setTitle(data?.title);
       setBill(data?.bill);
       setDescription(data?.description);
       setTags(data?.tags);
+      setPosition(data?.location)
       setFileList(
         data?.images?.map((img) => {
           return {
