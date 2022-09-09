@@ -1,4 +1,4 @@
-import {  Image, Modal, Tag, Typography } from "antd";
+import {  Image, Modal, Spin, Tag, Typography } from "antd";
 import moment from "moment/moment";
 import React, { useState } from "react";
 import Map from "./Map";
@@ -29,6 +29,9 @@ const ViewJobModal = ({ job }) => {
         onCancel={handleCancel}
         footer={false}
       >
+        <Spin size="large" spinning={!job}>
+
+        
         <div style={{ padding: "0 30px" }}>
           <Title level={5}>Title : {job.title}</Title>
 
@@ -62,6 +65,7 @@ const ViewJobModal = ({ job }) => {
             <Image src={image} height={80} style={{margin:'0 3px'}}/>
           ))}
         </div>
+        </Spin>
       </Modal>
     </div>
   );
