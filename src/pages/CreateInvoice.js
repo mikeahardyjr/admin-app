@@ -13,6 +13,7 @@ import {
   Upload,
   Tag,
   Modal,
+  Spin,
 } from "antd";
 import { useEffect, useState } from "react";
 import {
@@ -61,7 +62,8 @@ const CreateInvoice = () => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [existing, setExisting] = useState("");
   // const [position,setPosition] = useState([45.24652,69.23937])
-  const [position,setPosition] = useState([0,0])
+  const [position, setPosition] = useState([0, 0]);
+  const [formLoading,setFormLoading] = useState(false)
   const location = useLocation();
   const history = useHistory();
   const onBillChange = (e) => {
@@ -186,7 +188,7 @@ const CreateInvoice = () => {
           tags: tags,
           description: description,
           images: images,
-          location:position,
+          location: position,
           timeStamp: serverTimestamp(),
         });
       } else {
@@ -196,7 +198,7 @@ const CreateInvoice = () => {
           title,
           bill,
           images,
-          location:position,
+          location: position,
           timeStamp: serverTimestamp(),
         });
         clearFields();
@@ -227,16 +229,17 @@ const CreateInvoice = () => {
   // fetch data if editing
   const fetchDataById = async (id) => {
     try {
+      setFormLoading(true)
       console.log(id);
       let response = await getDoc(doc(db, "jobs", id));
       const data = response?.data();
-      console.log(data)
+      console.log(data);
       setExisting(id);
       setTitle(data?.title);
       setBill(data?.bill);
       setDescription(data?.description);
       setTags(data?.tags);
-      setPosition(data?.location)
+      setPosition(data?.location);
       setFileList(
         data?.images?.map((img) => {
           return {
@@ -245,6 +248,7 @@ const CreateInvoice = () => {
           };
         })
       );
+      setFormLoading(false)
     } catch (error) {}
   };
 
@@ -255,105 +259,104 @@ const CreateInvoice = () => {
       console.log(error);
     }
   }, []);
-{console.log(position)}
   return (
     <Layout active="create-invoice">
-      <div className="general-margin-padding form-container">
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            flexWrap: "wrap",
-            // justifyContent:'center'
-          }}
-        >
-          <Button
-            style={{ marginRight: "20px" }}
-            shape="circle"
-            icon={<AiOutlineArrowLeft />}
-            size="large"
-            onClick={() => history.push("/")}
-          />
-          <Title style={{ textAlign: "center", marginLeft: "20px" }}>
-            <FaFileInvoice style={{ marginRight: "10px" }} />
-            Add Job
-          </Title>
-        </div>
-        <div className="margin-vertical">
-          <Title level={3}>Title</Title>
-          <Input value={title} onChange={(e) => setTitle(e.target.value)} />
-        </div>
-        <div className="margin-vertical">
-          <Title level={3}>Billed</Title>
-          <Radio.Group onChange={onBillChange} value={bill}>
-            <Radio value={true}>Yes</Radio>
-            <Radio value={false}>No</Radio>
-          </Radio.Group>
-        </div>
-        <div className="margin-vertical">
-          <Title level={3}>Tags</Title>
-          <Select
-            mode="tags"
-            size={"large"}
-            placeholder="Please select"
-            // defaultValue={["install", "removal"]}
-            value={tags}
-            onChange={onSelectChange}
+      <Spin spinning={formLoading} size="large" >
+        <div className="general-margin-padding form-container">
+          <div
             style={{
-              width: "100%",
+              display: "flex",
+              alignItems: "center",
+              flexWrap: "wrap",
+              // justifyContent:'center'
             }}
-          ></Select>
-        </div>
-        <div className="margin-vertical">
-          <Title level={3}>Description</Title>
-          <Input
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-          />
-        </div>
-        <div className="margin-vertical">
-         <Map location={position} setCenter={setPosition}/>
-          
-        </div>
-        <div className="margin-vertical">
-          <Title level={3}>Images</Title>
-          <Upload
-            name="avatar"
-            listType="picture-card"
-            className="avatar-uploader"
-            showUploadList={true}
-            fileList={fileList}
-            multiple={true}
-            accept={"image"}
-            // action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-            beforeUpload={beforeUpload}
-            onChange={onImageUpload}
-            customRequest={customUpload}
-            onPreview={handlePreview}
           >
-            {fileList.length >= 5 ? null : uploadButton}
-          </Upload>
-        </div>
-        <div className="margin-vertical">
-          <Button loading={loading} type="primary" onClick={onSubmit}>
-            Submit
-          </Button>
-        </div>
-        <Modal
-          visible={previewVisible}
-          // title={previewTitle}
-          footer={null}
-          onCancel={handleCancel}
-        >
-          <img
-            alt="example"
-            style={{
-              width: "100%",
-            }}
-            src={previewImage}
-          />
-        </Modal>
-        {/* <div className="invoice">
+            <Button
+              style={{ marginRight: "20px" }}
+              shape="circle"
+              icon={<AiOutlineArrowLeft />}
+              size="large"
+              onClick={() => history.push("/")}
+            />
+            <Title style={{ textAlign: "center", marginLeft: "20px" }}>
+              <FaFileInvoice style={{ marginRight: "10px" }} />
+              Add Job
+            </Title>
+          </div>
+          <div className="margin-vertical">
+            <Title level={3}>Title</Title>
+            <Input value={title} onChange={(e) => setTitle(e.target.value)} />
+          </div>
+          <div className="margin-vertical">
+            <Title level={3}>Billed</Title>
+            <Radio.Group onChange={onBillChange} value={bill}>
+              <Radio value={true}>Yes</Radio>
+              <Radio value={false}>No</Radio>
+            </Radio.Group>
+          </div>
+          <div className="margin-vertical">
+            <Title level={3}>Tags</Title>
+            <Select
+              mode="tags"
+              size={"large"}
+              placeholder="Please select"
+              // defaultValue={["install", "removal"]}
+              value={tags}
+              onChange={onSelectChange}
+              style={{
+                width: "100%",
+              }}
+            ></Select>
+          </div>
+          <div className="margin-vertical">
+            <Title level={3}>Description</Title>
+            <Input
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+          </div>
+          <div className="margin-vertical">
+            <Map location={position} setCenter={setPosition} />
+          </div>
+          <div className="margin-vertical">
+            <Title level={3}>Images</Title>
+            <Upload
+              name="avatar"
+              listType="picture-card"
+              className="avatar-uploader"
+              showUploadList={true}
+              fileList={fileList}
+              multiple={true}
+              accept={"image"}
+              // action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+              beforeUpload={beforeUpload}
+              onChange={onImageUpload}
+              customRequest={customUpload}
+              onPreview={handlePreview}
+            >
+              {fileList.length >= 5 ? null : uploadButton}
+            </Upload>
+          </div>
+          <div className="margin-vertical">
+            <Button loading={loading} type="primary" onClick={onSubmit}>
+              Submit
+            </Button>
+          </div>
+          <Modal
+            visible={previewVisible}
+            // title={previewTitle}
+            footer={null}
+            onCancel={handleCancel}
+          >
+            <img
+              alt="example"
+              style={{
+                width: "100%",
+              }}
+              src={previewImage}
+            />
+          </Modal>
+          {/* <div className="invoice">
           <Row>
             <Col xs={24} lg={12}>
               <Title level={4}>From,</Title>
@@ -418,7 +421,8 @@ const CreateInvoice = () => {
             </Row>
           </div>
         </div> */}
-      </div>
+        </div>
+      </Spin>
     </Layout>
   );
 };
