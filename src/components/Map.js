@@ -10,8 +10,7 @@ import { useMemo, useState, useRef } from "react";
 import { Button } from "antd";
 
 import { useEffect } from "react";
-import { useResizeDetector } from 'react-resize-detector';
-
+import { useResizeDetector } from "react-resize-detector";
 
 const Map = (props) => {
   const [position, setPosition] = useState([0, 0]);
@@ -19,7 +18,6 @@ const Map = (props) => {
 
   // detect change every time modal opens
   const { width, height, ref } = useResizeDetector();
-
 
   const [showMyLocation, setShowMyLocation] = useState(false);
   const [liveLocation, setLiveLocation] = useState([]);
@@ -109,7 +107,8 @@ const Map = (props) => {
           dragging={true}
           key={Math.random() * 100 + "as9di214b"}
           center={props.location}
-          zoom={5}
+          zoom={20}
+          zoomControl={false}
           scrollWheelZoom={true}
           style={{ height: "400px" }}
         >
@@ -123,6 +122,7 @@ const Map = (props) => {
             riseOnHover={true}
             eventHandlers={eventHandlers}
             position={props.location}
+
             // icon={greenIcon}
           >
             <Popup>Drag Onto your Location</Popup>
