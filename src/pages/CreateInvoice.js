@@ -62,7 +62,7 @@ const CreateInvoice = () => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [existing, setExisting] = useState("");
   // const [position,setPosition] = useState([45.24652,69.23937])
-  const [position, setPosition] = useState([0, 0]);
+  const [position, setPosition] = useState([45.24652, 69.23937]);
   const [formLoading,setFormLoading] = useState(false)
   const location = useLocation();
   const history = useHistory();
