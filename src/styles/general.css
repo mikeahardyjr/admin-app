@@ -33,22 +33,31 @@ body {
   justify-content: space-between;
   flex-wrap: wrap;
 }
-.view-job-modal-row div{
+.view-job-modal-row div {
   display: flex;
   align-items: center;
 }
-.tags-modal{
+.tags-modal {
   display: flex;
   align-items: center;
   justify-content: flex-start;
 }
-.icon-btn{
+.icon-btn {
   display: flex !important;
   align-items: center;
 }
-.icon-btn svg{
+.icon-btn svg {
   margin-right: 5px;
 }
-.leaflet-touch .leaflet-control-attribution{
+.leaflet-touch .leaflet-control-attribution {
   display: none;
+}
+.map-container {
+  position: relative;
+}
+.map-container button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 999;
 }

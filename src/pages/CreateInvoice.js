@@ -38,6 +38,7 @@ import { useHistory, useLocation } from "react-router";
 import { uid } from "uid";
 import Swal from "sweetalert2";
 import Map from "../components/Map";
+import CoordinatesModal from "../components/CoordinatesModal";
 
 const { Title } = Typography;
 const { Option } = Select;
@@ -63,7 +64,7 @@ const CreateInvoice = () => {
   const [existing, setExisting] = useState("");
   // const [position,setPosition] = useState([45.24652,69.23937])
   const [position, setPosition] = useState([45.24652, 69.23937]);
-  const [formLoading,setFormLoading] = useState(false)
+  const [formLoading, setFormLoading] = useState(false);
   const location = useLocation();
   const history = useHistory();
   const onBillChange = (e) => {
@@ -229,7 +230,7 @@ const CreateInvoice = () => {
   // fetch data if editing
   const fetchDataById = async (id) => {
     try {
-      setFormLoading(true)
+      setFormLoading(true);
       console.log(id);
       let response = await getDoc(doc(db, "jobs", id));
       const data = response?.data();
@@ -248,7 +249,7 @@ const CreateInvoice = () => {
           };
         })
       );
-      setFormLoading(false)
+      setFormLoading(false);
     } catch (error) {}
   };
 
@@ -261,7 +262,7 @@ const CreateInvoice = () => {
   }, []);
   return (
     <Layout active="create-invoice">
-      <Spin spinning={formLoading} size="large" >
+      <Spin spinning={formLoading} size="large">
         <div className="general-margin-padding form-container">
           <div
             style={{
@@ -315,8 +316,9 @@ const CreateInvoice = () => {
               onChange={(e) => setDescription(e.target.value)}
             />
           </div>
-          <div className="margin-vertical">
+          <div className="margin-vertical map-container">
             <Map location={position} setCenter={setPosition} />
+            <CoordinatesModal setPosition={setPosition}/>
           </div>
           <div className="margin-vertical">
             <Title level={3}>Images</Title>
