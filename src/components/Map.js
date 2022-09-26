@@ -1,148 +1,124 @@
-import {
-  MapContainer,
-  TileLayer,
-  Marker,
-  Popup,
-  //  Circle,
-  Tooltip,
-} from "react-leaflet";
 import { useMemo, useState, useRef } from "react";
-import { Button } from "antd";
 
 import { useEffect } from "react";
-import { useResizeDetector } from "react-resize-detector";
+import { Marker, GoogleMap, useLoadScript } from "@react-google-maps/api";
+import usePlacesAutocomplete, {
+  getGeocode,
+  getLatLng,
+} from "use-places-autocomplete";
+import {
+  Combobox,
+  ComboboxInput,
+  ComboboxPopover,
+  ComboboxList,
+  ComboboxOption,
+  ComboboxOptionText,
+} from "@reach/combobox";
+import "@reach/combobox/styles.css";
 
-const Map = (props) => {
-  const [position, setPosition] = useState([0, 0]);
-  const refmarker = useRef(null);
+const PlacesAutoComplete = ({ setSelected, setPosition }) => {
+  const {
+    ready,
+    value,
+    setValue,
+    suggestions: { status, data },
+    clearSuggestions,
+  } = usePlacesAutocomplete();
+  const handlePlaceSelect = async (address) => {
+    setValue(address, false);
+    clearSuggestions();
+    const results = await getGeocode({ address });
+    console.log(results);
+    const { lat, lng } = getLatLng(results[0]);
+    console.log(lat, lng);
+    setSelected({ lat, lng });
+    setPosition({lat,lng})
+  };
+  return (
+    <Combobox onSelect={handlePlaceSelect}>
+      <ComboboxInput
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        disabled={!ready}
+        className="combobox-input"
+        placeholder="Search an address"
+      />
+      <ComboboxPopover>
+        <ComboboxList>
+          {status === "OK" &&
+            data.map(({ place_id, description }) => (
+              <ComboboxOption key={place_id} value={description} />
+            ))}
+        </ComboboxList>
+      </ComboboxPopover>
+    </Combobox>
+  );
+};
 
-  // detect change every time modal opens
-  const { width, height, ref } = useResizeDetector();
-
-  const [showMyLocation, setShowMyLocation] = useState(false);
-  const [liveLocation, setLiveLocation] = useState([]);
-
-  useEffect(() => {
-    if (!props.location) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          console.log(position.coords.accuracy);
-          // setAcc(position.coords.accuracy);
-
-          setPosition([position.coords.latitude, position.coords.longitude]);
-          if (!props.readOnly) {
-            props?.setCenter([
-              position.coords.latitude,
-              position.coords.longitude,
-            ]);
-          }
-        },
-        (e) => {
-          console.log(e);
-        },
-        {
-          enableHighAccuracy: true,
-          timeout: 5000,
-          maximumAge: 0,
+const Map = ({ position, setPosition, readOnly }) => {
+  const [selected, setSelected] = useState(null);
+  const { isLoaded } = useLoadScript({
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
+    libraries: ["places"],
+  });
+  const center = useMemo(() => ({ lat: 44, lng: -80 }), []);
+  const onMapLoad = (position) => {
+    if (!position) {
+      console.log("if");
+      navigator?.geolocation.getCurrentPosition(
+        ({ coords: { latitude: lat, longitude: lng } }) => {
+          const pos = { lat, lng };
+          setSelected(pos);
+          setPosition({
+            lat,
+            lng,
+          });
         }
       );
     } else {
-      console.log(props.location);
-      setPosition(props.location);
-      if (!props.readOnly) {
-        props?.setCenter(props.location);
-      }
-    }
-  }, [ref]);
-
-  const getLiveLocation = () => {
-    if (!showMyLocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setLiveLocation([
-            position.coords.latitude,
-            position.coords.longitude,
-          ]);
-          setShowMyLocation(true);
-        },
-        (e) => {
-          console.log(e);
-        },
-        {
-          enableHighAccuracy: true,
-          timeout: 5000,
-          maximumAge: 0,
-        }
-      );
-    } else {
-      setShowMyLocation(false);
+      setSelected(position);
     }
   };
+  const markerClickHandler = (event, place) => {
+    console.log(event, place);
+  };
+  const handleMapClick = (e) =>{
+    if(readOnly) return
+    let { lat, lng } = e.latLng.toJSON();
+    setSelected(e.latLng.toJSON());
+    console.log(lat, lng);
+    setPosition({ lat, lng });
+  }
+  useEffect(() => {
+    onMapLoad(position);
+  }, [position]);
 
-  const eventHandlers = useMemo(
-    () => ({
-      dragend() {
-        const marker = refmarker.current;
-        if (marker != null) {
-          let lat = marker.getLatLng().lat;
-          let lng = marker.getLatLng().lng;
-          setPosition([lat, lng]);
-          if (!props.readOnly) {
-            props.setCenter([lat, lng]);
-          }
-        }
-      },
-    }),
-    []
-  );
-
+  if (!isLoaded) return <div>Loading...</div>;
   return (
-    <div style={{ height: "100%", width: "100%" }} ref={ref}>
-      <div style={{ height: "70%", width: "100%" }}>
-        <link
-          rel="stylesheet"
-          href="https://unpkg.com/leaflet@1.0.1/dist/leaflet.css"
-        />
-        <MapContainer
-          dragging={true}
-          key={Math.random() * 100 + "as9di214b"}
-          center={props.location}
-          zoom={20}
-          zoomControl={false}
-          scrollWheelZoom={true}
-          style={{ height: "400px" }}
-        >
-          <TileLayer
-            // attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+    <>
+      {!readOnly && (
+        <div>
+          <PlacesAutoComplete
+            setSelected={setSelected}
+            setPosition={setPosition}
           />
+        </div>
+      )}
+      <GoogleMap
+        zoom={15}
+        center={selected}
+        // onLoad={onMapLoad}
+        onClick={handleMapClick}
+        mapContainerClassName="map-container"
+      >
+        {selected && (
           <Marker
-            draggable={true}
-            ref={refmarker}
-            riseOnHover={true}
-            eventHandlers={eventHandlers}
-            position={props.location}
-
-            // icon={greenIcon}
-          >
-            <Popup>Drag Onto your Location</Popup>
-          </Marker>
-
-          {showMyLocation && (
-            <Marker position={liveLocation}>
-              <Tooltip
-                direction="bottom"
-                offset={[0, 20]}
-                opacity={1}
-                permanent
-              >
-                YOUR LIVE LOCATION
-              </Tooltip>
-            </Marker>
-          )}
-        </MapContainer>
-      </div>
-    </div>
+            position={selected}
+            onClick={(event) => markerClickHandler(event)}
+          />
+        )}
+      </GoogleMap>
+    </>
   );
 };
 

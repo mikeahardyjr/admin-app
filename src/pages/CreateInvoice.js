@@ -63,7 +63,7 @@ const CreateInvoice = () => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [existing, setExisting] = useState("");
   // const [position,setPosition] = useState([45.24652,69.23937])
-  const [position, setPosition] = useState([45.24652, 69.23937]);
+  const [position, setPosition] = useState(null);
   const [formLoading, setFormLoading] = useState(false);
   const location = useLocation();
   const history = useHistory();
@@ -260,6 +260,7 @@ const CreateInvoice = () => {
       console.log(error);
     }
   }, []);
+  console.log(position)
   return (
     <Layout active="create-invoice">
       <Spin spinning={formLoading} size="large">
@@ -317,8 +318,7 @@ const CreateInvoice = () => {
             />
           </div>
           <div className="margin-vertical map-container">
-            <Map location={position} setCenter={setPosition} />
-            <CoordinatesModal setPosition={setPosition}/>
+            <Map position={position} setPosition={setPosition} />
           </div>
           <div className="margin-vertical">
             <Title level={3}>Images</Title>

@@ -12,6 +12,7 @@ import { AiFillDelete, AiFillEdit, AiFillEye } from "react-icons/ai";
 import Swal from "sweetalert2";
 import ViewJobModal from "../components/ViewJobModal";
 
+
 const Dashboard = () => {
   const { Title } = Typography;
   const [users, setUsers] = useState(null);
@@ -119,7 +120,7 @@ const Dashboard = () => {
         search: true,
       },
       {
-        label: "Description",
+        label: "Notes",
         field: "description",
         sort: "asc",
         width: 300,
