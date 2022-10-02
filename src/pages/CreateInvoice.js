@@ -94,10 +94,10 @@ const CreateInvoice = () => {
         return;
       }
 
-      const isLt2M = info.file.size / 1024 / 1024 < 2;
+      const isLt2M = info.file.size / 10000 / 10000 < 10;
 
       if (!isLt2M) {
-        message.error("Image must smaller than 2MB!");
+        message.error("Image must smaller than 10MB!");
         return;
       }
 
